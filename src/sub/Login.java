@@ -76,7 +76,7 @@ public class Login extends JFrame {
 					int result = dao.login(uid, password);
 					if (result == 1) {
 						JOptionPane.showMessageDialog(null, "로그인 성공");
-						WorkMain wMain = new WorkMain();
+						WorkMain wMain = new WorkMain(txtId.getText());//여기에
 						wMain.setVisible(true);
 						dispose();
 					} else if (result == 0)

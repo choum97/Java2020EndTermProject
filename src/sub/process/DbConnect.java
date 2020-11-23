@@ -45,10 +45,13 @@ public class DbConnect {
 // DB 연결 끊기
 	public void closeCon() {
 		try {
+			if (rs != null)
+				rs.close();
+			if (psmt != null)
+				psmt.close();
 			if (con != null) {
 				con.close();
-				System.out.println("DB연결 해제");
-			}
+				System.out.println("DB연결 해제");}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -65,7 +68,7 @@ public class DbConnect {
 			psmt.setString(3, userPw);
 			psmt.setString(4, userEmail);
 			// psmt.executeUpdate();
-			int excuteQuery = psmt.executeUpdate();
+			int excuteQuery = psmt.executeUpdate();//성공하면 1반환
 			if (excuteQuery != 1)
 				JOptionPane.showMessageDialog(null, "가입 실패");
 			else {

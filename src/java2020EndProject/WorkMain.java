@@ -33,7 +33,7 @@ public class WorkMain extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					WorkMain frame = new WorkMain();
+					WorkMain frame = new WorkMain(null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -46,10 +46,8 @@ public class WorkMain extends JFrame {
 	 * Create the frame.
 	 * @return 
 	 */
-	public WorkMain(String userName) {
-		String uName = userName; 
-	}
-	public WorkMain() {
+
+	public WorkMain(String userId) {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1156, 478);
@@ -72,7 +70,7 @@ public class WorkMain extends JFrame {
 		
 		JLabel lbluserName = new JLabel("\uAE40\uC694\uD55C\uB2D8");
 		lbluserName.setBounds(964, 24, 57, 15);
-		lbluserName.setText(getName());
+		lbluserName.setText(userId);
 		contentPane.add(lbluserName);
 		
 		
