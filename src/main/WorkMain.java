@@ -1,4 +1,4 @@
-package java2020EndProject;
+package main;
 
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -20,8 +20,10 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+
+import db.DAO;
 import sub.Login;
-import sub.process.DAO;
+
 import javax.swing.JScrollBar;
 
 public class WorkMain extends JFrame {

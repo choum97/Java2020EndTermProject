@@ -1,4 +1,4 @@
-package sub.process;
+package db;
 
 public class MemberDTO {
 	private String daoName;

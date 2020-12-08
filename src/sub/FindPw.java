@@ -13,8 +13,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import sub.process.DAO;
-import sub.process.MemberDTO;
+import db.DAO;
+import db.MemberDTO;
 
 public class FindPw extends JFrame {
 

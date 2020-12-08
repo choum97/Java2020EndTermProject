@@ -1,4 +1,4 @@
-package java2020EndProject;
+package main;
 
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
@@ -17,7 +17,7 @@ import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
-import sub.process.DAO;
+import db.DAO;
 
 public class WorkBackUpContent extends JFrame {
 	DAO dao = new DAO();
@@ -87,6 +87,7 @@ public class WorkBackUpContent extends JFrame {
 				String cName = (String) jtable.getValueAt(row, 0);
 				model.removeRow(row);
 				dao.mainReturn(cName);
+
 			}
 		});
 		btnRestore.setBounds(881, 203, 97, 23);

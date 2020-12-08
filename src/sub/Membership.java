@@ -13,7 +13,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import sub.process.DAO;
+import db.DAO;
 
 public class Membership extends JFrame {
 
@@ -81,7 +81,7 @@ public class Membership extends JFrame {
 					String userid = txtId.getText();
 					String password = txtPw.getText();
 					String uemail = txtEmail.getText();
-					testDB.insertData(username, userid, password, uemail);
+					testDB.insertMember(username, userid, password, uemail);
 					dispose();
 				}
 			}
