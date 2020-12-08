@@ -1,10 +1,18 @@
 package sub.process;
 
-public class MemberDAO {
+public class MemberDTO {
 	private String daoName;
 	private String daoID;
 	private String daoPW;
 	private String daoEmail;
+	
+	public MemberDTO() {
+		
+	}
+	
+	public MemberDTO(String id, String pw) {
+		
+	}
 	public String getDaoName() {
 		return daoName;
 	}

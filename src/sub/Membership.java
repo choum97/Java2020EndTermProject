@@ -13,7 +13,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import sub.process.DbConnect;
+import sub.process.DAO;
 
 public class Membership extends JFrame {
 
@@ -22,7 +22,7 @@ public class Membership extends JFrame {
 	private JTextField txtId;
 	private JTextField txtEmail;
 	private JPasswordField txtPw;
-	static DbConnect testDB = new DbConnect();
+	static DAO testDB = new DAO();
 	static int idCk = 0;
 	/**
 	 * Launch the application.
@@ -128,7 +128,7 @@ public class Membership extends JFrame {
 		btnIdCheck.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String userid = txtId.getText();
-				DbConnect dao = DbConnect.getInstance();
+				DAO dao = DAO.getInstance();
 				int result = dao.idCheck(userid);
 				if (result == 0)
 					JOptionPane.showMessageDialog(null, "사용중인 ID입니다");

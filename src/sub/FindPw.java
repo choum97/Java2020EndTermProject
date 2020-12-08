@@ -13,8 +13,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import sub.process.DbConnect;
-import sub.process.MemberDAO;
+import sub.process.DAO;
+import sub.process.MemberDTO;
 
 public class FindPw extends JFrame {
 
@@ -27,7 +27,7 @@ public class FindPw extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		DbConnect testDB = new DbConnect();
+		DAO testDB = new DAO();
 		testDB.openCon(); // DB연결
 
 		EventQueue.invokeLater(new Runnable() {
@@ -75,7 +75,7 @@ public class FindPw extends JFrame {
 					String username = txtName.getText();
 					String userid = txtId.getText();
 					String uemail = txtEmail.getText();
-					DbConnect dao = DbConnect.getInstance();
+					DAO dao = DAO.getInstance();
 					String result = dao.findUserPassword(username, userid, uemail);
 					if (result != null) {
 						JOptionPane.showMessageDialog(null, "비밀번호는 : " + result);

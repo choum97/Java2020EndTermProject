@@ -15,18 +15,16 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import java2020EndProject.WorkMain;
-import sub.process.DbConnect;
+import sub.process.DAO;
 
 public class Login extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField txtId, txtPw;
 
-	DbConnect testDB = new DbConnect();
+	DAO testDB = new DAO();
 
-	/**
-	 * Launch the application.
-	 */
+
 	public static void main(String[] args) {
 
 		EventQueue.invokeLater(new Runnable() {
@@ -41,9 +39,6 @@ public class Login extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
 	public Login() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 285, 199);
@@ -72,11 +67,11 @@ public class Login extends JFrame {
 				} else {
 					String uid = txtId.getText();
 					String password = txtPw.getText();
-					DbConnect dao = DbConnect.getInstance();
+					DAO dao = DAO.getInstance();
 					int result = dao.login(uid, password);
 					if (result == 1) {
 						JOptionPane.showMessageDialog(null, "로그인 성공");
-						WorkMain wMain = new WorkMain(txtId.getText());//여기에
+						WorkMain wMain = new WorkMain(txtId.getText());
 						wMain.setVisible(true);
 						dispose();
 					} else if (result == 0)
@@ -130,13 +125,4 @@ public class Login extends JFrame {
 		lblNewLabel_2.setBounds(12, 10, 75, 33);
 		contentPane.add(lblNewLabel_2);
 	}
-
-	public String getId() {
-		return txtId.getText();
-	}
-
-	public String getPw() {
-		return txtPw.getText();
-	}
-
 }

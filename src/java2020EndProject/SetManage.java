@@ -8,6 +8,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class SetManage extends JFrame {
 
@@ -48,13 +50,21 @@ public class SetManage extends JFrame {
 		lblNewLabel.setBounds(12, 43, 57, 15);
 		contentPane.add(lblNewLabel);
 		
-		JButton btnNewButton = new JButton("\uCDE8\uC18C");
-		btnNewButton.setBounds(247, 260, 69, 23);
-		contentPane.add(btnNewButton);
+		JButton btnExit = new JButton("\uCDE8\uC18C"); //취소
+		btnExit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnExit.setBounds(247, 260, 69, 23);
+		contentPane.add(btnExit);
 		
-		JButton btnNewButton_1 = new JButton("\uD655\uC778");
-		btnNewButton_1.setBounds(166, 260, 69, 23);
-		contentPane.add(btnNewButton_1);
+		JButton btnOk = new JButton("\uD655\uC778");  // 확인
+		btnOk.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnOk.setBounds(166, 260, 69, 23);
+		contentPane.add(btnOk);
 		
 		JLabel lblNewLabel_1 = new JLabel("\uC624\uD53C\uC2A4\uD154");
 		lblNewLabel_1.setBounds(12, 76, 57, 15);
