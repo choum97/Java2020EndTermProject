@@ -1,9 +1,9 @@
 package main;
 
-import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Date;
 import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
@@ -23,8 +23,6 @@ import javax.swing.table.DefaultTableModel;
 
 import db.DAO;
 import sub.Login;
-
-import javax.swing.JScrollBar;
 
 public class WorkMain extends JFrame {
 	DAO dao = new DAO();
@@ -152,7 +150,20 @@ public class WorkMain extends JFrame {
 		JButton btnChangeContents = new JButton("\uC218\uC815");
 		btnChangeContents.addActionListener(new ActionListener() { // ¼öÁ¤
 			public void actionPerformed(ActionEvent e) {
-				ChangeContent chagecontent = new ChangeContent();
+				
+				int row = jtable.getSelectedRow();
+				if(row<0) return;
+				String name = (String) jtable.getValueAt(row, 0);
+				String roadName = (String) jtable.getValueAt(row, 1);
+				String branchName = (String) jtable.getValueAt(row, 2);
+				String postal = (String) jtable.getValueAt(row, 3);
+				String division = (String) jtable.getValueAt(row, 4);
+				String phone = (String) jtable.getValueAt(row, 5);
+				String cleanname = (String) jtable.getValueAt(row, 6);
+				String cleanday= (String) jtable.getValueAt(row, 7);
+				
+				
+				ChangeContent chagecontent = new ChangeContent(name, roadName, branchName,postal,division,phone,cleanname,cleanday);
 				chagecontent.setVisible(true);
 			}
 		});

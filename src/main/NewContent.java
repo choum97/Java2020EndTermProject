@@ -79,7 +79,7 @@ public class NewContent extends JFrame {
 
 		txtName = new JTextField();
 		txtName.setColumns(10);
-		txtName.setBounds(69, 31, 116, 21);
+		txtName.setBounds(69, 31, 290, 21);
 		contentPane.add(txtName);
 
 		JButton btnExit = new JButton("\uCDE8\uC18C"); // 취소
@@ -96,13 +96,13 @@ public class NewContent extends JFrame {
 		contentPane.add(lblPw_1);
 
 		JLabel lblEmail_1 = new JLabel("\uAD6C\uBD84");
-		lblEmail_1.setBounds(197, 34, 57, 15);
+		lblEmail_1.setBounds(210, 112, 57, 15);
 		contentPane.add(lblEmail_1);
 
 		JComboBox coboDivision = new JComboBox();
 		coboDivision.setModel(new DefaultComboBoxModel(new String[] { "휴게음식점", "일반음식점", "상가", "오피스텔", "백화점", "대형마트",
 				"종교집회장", "문화집회시설", "아파트", "학교", "지하철", "식품접객업" }));
-		coboDivision.setBounds(248, 31, 111, 21);
+		coboDivision.setBounds(248, 109, 111, 21);
 		contentPane.add(coboDivision);
 
 		JLabel lblEmail_2 = new JLabel("\uC18C\uB3C5\uC5C5\uCCB4");
@@ -111,12 +111,12 @@ public class NewContent extends JFrame {
 
 		txtCleanName = new JTextField();
 		txtCleanName.setColumns(10);
-		txtCleanName.setBounds(69, 170, 130, 21);
+		txtCleanName.setBounds(69, 170, 116, 21);
 		contentPane.add(txtCleanName);
 
 		txtPostal = new JTextField();
 		txtPostal.setColumns(10);
-		txtPostal.setBounds(69, 109, 111, 21);
+		txtPostal.setBounds(69, 109, 116, 21);
 		contentPane.add(txtPostal);
 
 		JLabel lblNewLabel_1 = new JLabel("\uC2E0\uADDC \uCD94\uAC00");

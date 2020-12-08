@@ -21,11 +21,7 @@ public class DAO {
 	static String pwd = "1234";
 	private String query = null;
 
-	
-	
 	private static DAO instance = new DAO();
-	
-	
 
 	public static DAO getInstance() { // 결과값 반환 해주기
 		return instance;
@@ -210,9 +206,10 @@ public class DAO {
 			closeCon();
 		}
 	}
-	
+
 // 신규 소독 실적제출처 
 	static int resultData;
+
 	public int insertData(dataDTO ddto) {
 		try {
 			openCon();
@@ -237,8 +234,34 @@ public class DAO {
 		}
 		return resultData;
 	}
-	
 
+// 신규 소독 실적제출처
+
+
+	public int chagetData(dataDTO ddto) {
+		try {
+			openCon();
+
+			String query1 = "UPDATE disinfection_target_list SET value(?,?,?,?,?,?,?,?,?) WHERE ";
+			psmt = con.prepareStatement(query1);
+			psmt.setString(1, ddto.getcName());
+			psmt.setString(2, ddto.getcRoadName());
+			psmt.setString(3, ddto.getcBranchName());
+			psmt.setString(4, ddto.getcPostal());
+			psmt.setString(5, ddto.getcDivision());
+			psmt.setString(6, ddto.getcPhone());
+			psmt.setString(7, ddto.getcCleanName());
+			psmt.setDate(8, null);
+			psmt.setInt(9, 1);
+
+			int excuteQuery = psmt.executeUpdate();// 성공하면 1반환
+			resultData = excuteQuery;
+			closeCon();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultData;
+	}
 
 ///////////////////////////////////////////////////////////////////
 // 회원가입
