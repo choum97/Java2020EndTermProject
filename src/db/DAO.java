@@ -1,10 +1,13 @@
 package db;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Vector;
 
 import javax.swing.JOptionPane;
@@ -23,7 +26,7 @@ public class DAO {
 
 	private static DAO instance = new DAO();
 
-	public static DAO getInstance() { // 결과값 반환 해주기
+	public static DAO getInstance() {
 		return instance;
 	}
 
@@ -49,17 +52,70 @@ public class DAO {
 				rs.close();
 			if (psmt != null)
 				psmt.close();
-			if (con != null) {
+			if (con != null)
 				con.close();
-				// System.out.println("DB연결 해제");
-			}
+			// System.out.println("DB연결 해제");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+	
+	public String manageTimeGet(String num) {
+		openCon();
+		try {
+			String query = "SELECT startDay FROM time_set WHERE tNum = ?";
+			psmt = con.prepareStatement(query);
+			psmt.setString(1, num);
+			rs = psmt.executeQuery();
+			while (rs.next()) {
+				// System.out.println(rs.getString(1));
+				return rs.getString(1); // sql 결과값 넘기기
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		closeCon();
+		return null;
+	}	
 
-	public void newContent() {
+// 설정된 관리명단 값들
+	public Vector manageShow() {
+		Vector data = new Vector();
+		openCon();
 
+		try {//"select * from disinfection_target_list where flag = 1 AND cCleanDay Not between date('20200428')+ and date('20201228')+1";
+			
+			String sql = "select * from disinfection_target_list where flag = 1 AND cDivision = '휴게음식점' AND cCleanDay Not between "+ manageTimeGet("1") +" and "+ toDay();
+			psmt = con.prepareStatement(sql);
+			rs = psmt.executeQuery();
+			while (rs.next()) {
+				Integer cNum = rs.getInt("cNum");
+				String cName = rs.getString("cName");
+				String cRoadName = rs.getString("cRoadName");
+				String cBranchName = rs.getString("cBranchName");
+				String cPostal = rs.getString("cPostal");
+				String cDivision = rs.getString("cDivision");
+				String cPhone = rs.getString("cPhone");
+				String cCleanName = rs.getString("cCleanName");
+				String cCleanDay = rs.getString("cCleanDay");
+
+				Vector row = new Vector();
+				row.add(cNum);
+				row.add(cName);
+				row.add(cRoadName);
+				row.add(cBranchName);
+				row.add(cPostal);
+				row.add(cDivision);
+				row.add(cPhone);
+				row.add(cCleanName);
+				row.add(cCleanDay);
+
+				data.add(row);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return data;
 	}
 
 // 소독대상 DB 값 가져오기 (flag가 1인 값들)
@@ -72,6 +128,7 @@ public class DAO {
 			psmt = con.prepareStatement(sql);
 			rs = psmt.executeQuery();
 			while (rs.next()) {
+				Integer cNum = rs.getInt("cNum");
 				String cName = rs.getString("cName");
 				String cRoadName = rs.getString("cRoadName");
 				String cBranchName = rs.getString("cBranchName");
@@ -82,6 +139,7 @@ public class DAO {
 				String cCleanDay = rs.getString("cCleanDay");
 
 				Vector row = new Vector();
+				row.add(cNum);
 				row.add(cName);
 				row.add(cRoadName);
 				row.add(cBranchName);
@@ -102,6 +160,7 @@ public class DAO {
 // 테이블 상단에 표시할 열
 	public Vector getColimn() {
 		Vector col = new Vector();
+		col.add("고유번호");
 		col.add("이름");
 		col.add("도로명");
 		col.add("지번");
@@ -117,13 +176,13 @@ public class DAO {
 // 메인에서 삭제버튼으로 flag가 0으로 변경된 DB 값들 가져오기
 	public Vector showBackupData() {
 		Vector data = new Vector();
-		openCon();
-
 		try {
+			openCon();
 			String sql = "SELECT * FROM disinfection_target_list WHERE flag = 0";
 			psmt = con.prepareStatement(sql);
 			rs = psmt.executeQuery();
 			while (rs.next()) {
+				int cNum = rs.getInt("cNum");
 				String cName = rs.getString("cName");
 				String cRoadName = rs.getString("cRoadName");
 				String cBranchName = rs.getString("cBranchName");
@@ -134,6 +193,7 @@ public class DAO {
 				String cCleanDay = rs.getString("cCleanDay");
 
 				Vector row = new Vector();
+				row.add(cNum);
 				row.add(cName);
 				row.add(cRoadName);
 				row.add(cBranchName);
@@ -144,40 +204,41 @@ public class DAO {
 				row.add(cCleanDay);
 
 				data.add(row);
+
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		closeCon();
 		return data;
 	}
 
 // 삭재내역에서 삭제 - DB에서 데이터 삭제
-	public void delete(String cName) {
+	public void delete(int cNum) {
 		try {
 			openCon();
-			String query4 = "DELETE FROM disinfection_target_list WHERE cName = ?";
+			String query4 = "DELETE FROM disinfection_target_list WHERE cNum = ?";
 			psmt = con.prepareStatement(query4);
-			psmt.setString(1, cName);
+			psmt.setInt(1, cNum);
 			int excuteQuery = psmt.executeUpdate();
 			if (excuteQuery != 1)
 				JOptionPane.showMessageDialog(null, "삭제 실패");
 			else {
 				JOptionPane.showMessageDialog(null, "삭제 성공");
 			}
+			closeCon();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			closeCon();
 		}
 	}
 
 // 삭제내역에서 다시 메인에 테이블로 복원시켜주기
-	public void mainReturn(String cName) {
+	public void mainReturn(int cNum) {
 		try {
 			openCon();
-			String query3 = "UPDATE disinfection_target_list SET flag = 1  WHERE cName = ?";
+			String query3 = "UPDATE disinfection_target_list SET flag = 1  WHERE cNum = ?";
 			psmt = con.prepareStatement(query3);
-			psmt.setString(1, cName);
+			psmt.setInt(1, cNum);
 			int excuteQuery = psmt.executeUpdate();
 
 			if (excuteQuery != 1)
@@ -193,12 +254,12 @@ public class DAO {
 	}
 
 // 메인 테이블에서 안 보이게하기 - DB값 삭제 X
-	public void mainDel(String cName) {
+	public void mainDel(int cNum) {
 		try {
 			openCon();
-			String query3 = "UPDATE disinfection_target_list SET flag = 0  WHERE cName = ?";
+			String query3 = "UPDATE disinfection_target_list SET flag = 0  WHERE cNum = ?";
 			psmt = con.prepareStatement(query3);
-			psmt.setString(1, cName);
+			psmt.setInt(1, cNum);
 			int excuteQuery = psmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -211,10 +272,9 @@ public class DAO {
 	static int resultData;
 
 	public int insertData(dataDTO ddto) {
+		openCon();
 		try {
-			openCon();
-
-			String query1 = "insert into disinfection_target_list value(?,?,?,?,?,?,?,?,?)";
+			String query1 = "insert into disinfection_target_list(cName, cRoadName,cBranchName,cPostal,cDivision,cPhone,cCleanName,cCleanDay,flag) value(?,?,?,?,?,?,?,?,?)";
 			psmt = con.prepareStatement(query1);
 			psmt.setString(1, ddto.getcName());
 			psmt.setString(2, ddto.getcRoadName());
@@ -225,6 +285,34 @@ public class DAO {
 			psmt.setString(7, ddto.getcCleanName());
 			psmt.setDate(8, null);
 			psmt.setInt(9, 1);
+
+			int excuteQuery = psmt.executeUpdate();// 성공하면 1반환
+			resultData = excuteQuery;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		closeCon();
+		return resultData;
+	}
+
+// 수정부분 - 소독 실적제출처
+	public int chagetData(dataDTO ddto) {
+		try {
+			openCon();
+
+			String query1 = "UPDATE disinfection_target_list SET cName = ?, cRoadName=?,cBranchName=?,cPostal=?,cDivision=?,cPhone=?,cCleanName=?,cCleanDay=?,flag=? WHERE cNum = ?";
+			psmt = con.prepareStatement(query1);
+			psmt.setString(1, ddto.getcName());
+			psmt.setString(2, ddto.getcRoadName());
+			psmt.setString(3, ddto.getcBranchName());
+			psmt.setString(4, ddto.getcPostal());
+			psmt.setString(5, ddto.getcDivision());
+			psmt.setString(6, ddto.getcPhone());
+			psmt.setString(7, ddto.getcCleanName());
+			psmt.setDate(8, null);
+			psmt.setInt(9, 1);
+			psmt.setInt(10, ddto.getcNum());
 
 			int excuteQuery = psmt.executeUpdate();// 성공하면 1반환
 			resultData = excuteQuery;
@@ -235,32 +323,87 @@ public class DAO {
 		return resultData;
 	}
 
-// 신규 소독 실적제출처
+// 검색	- 테이블값, 검색조건, 검색할 단어, 삭제 여부(메인에서)
+	public void seachWord(DefaultTableModel dt, String seachLimit, String seachWord, int flagNum) {
+		openCon();
+		try {
 
+			if (seachLimit == null) { // 전체 검색
+				String sql2 = "SELECT * FROM disinfection_target_list WHERE flag = '" + flagNum + "' AND cName LIKE '%"
+						+ seachWord.trim() + "%' OR cRoadName LIKE '%" + seachWord.trim() + "%' OR cBranchName LIKE '%"
+						+ seachWord.trim() + "%'";
+				psmt = con.prepareStatement(sql2);
+			} else { // 다른 검색들
+				String sql = "SELECT * FROM disinfection_target_list WHERE flag = '" + flagNum + "' AND "
+						+ seachLimit.trim() + " LIKE '%" + seachWord.trim() + "%'";
+				psmt = con.prepareStatement(sql);
+			}
+			rs = psmt.executeQuery();
+			for (int i = 0; i < dt.getRowCount();) {
+				dt.removeRow(0);
+			}
+			while (rs.next()) {
+				Object data[] = { rs.getInt("cNum"), rs.getString("cName"), rs.getString("cRoadName"),
+						rs.getString("cBranchName"), rs.getString("cPostal"), rs.getString("cDivision"),
+						rs.getString("cPhone"), rs.getString("cCleanName"), rs.getString("cCleanDay") };
+				dt.addRow(data);
+			}
 
-	public int chagetData(dataDTO ddto) {
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		closeCon();
+	}
+
+//time_set에 저장되어 있는 기간값을 관리명단 각 txt에 보여줌
+	public String timeShow(String num) {
 		try {
 			openCon();
+			String query = "SELECT startDay FROM time_set where tNum = '" + num + "'";
+			psmt = con.prepareStatement(query);
+			rs = psmt.executeQuery();
+			while (rs.next()) {
+				// System.out.println(rs.getString(1));
+				return rs.getString(1); // sql 결과값 넘기기
+			}
 
-			String query1 = "UPDATE disinfection_target_list SET value(?,?,?,?,?,?,?,?,?) WHERE ";
-			psmt = con.prepareStatement(query1);
-			psmt.setString(1, ddto.getcName());
-			psmt.setString(2, ddto.getcRoadName());
-			psmt.setString(3, ddto.getcBranchName());
-			psmt.setString(4, ddto.getcPostal());
-			psmt.setString(5, ddto.getcDivision());
-			psmt.setString(6, ddto.getcPhone());
-			psmt.setString(7, ddto.getcCleanName());
-			psmt.setDate(8, null);
-			psmt.setInt(9, 1);
-
-			int excuteQuery = psmt.executeUpdate();// 성공하면 1반환
-			resultData = excuteQuery;
-			closeCon();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return resultData;
+		closeCon();
+		return null;
+	}
+
+// 관리명단 기간 설정 및 변경 
+	public void timeSet(int tNum, String sDay, String toDay) {
+		openCon();
+		try {
+			String query = "UPDATE time_set SET startDay = ?, toDay = ? WHERE tNum = ?";
+			psmt = con.prepareStatement(query);
+			psmt.setString(1, sDay);
+			psmt.setString(2, toDay);
+			psmt.setInt(3, tNum);
+			int excuteQuery = psmt.executeUpdate();// 성공하면 1반환
+			if (excuteQuery != 1) {
+				JOptionPane.showMessageDialog(null, "설정 실패");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		closeCon();
+	}
+
+// 오늘 날짜 계산
+	public String toDay() {
+		SimpleDateFormat dateFormat;
+		dateFormat = new SimpleDateFormat("yyyyMMdd");
+		Calendar cal = Calendar.getInstance();
+
+		cal.setTime(new Date(System.currentTimeMillis()));
+		String endDate = dateFormat.format(cal.getTime()); // 오늘
+
+		cal.add(Calendar.MONTH, 1);
+		return endDate;
 	}
 
 ///////////////////////////////////////////////////////////////////

@@ -1,6 +1,8 @@
 package db;
 
 public class dataDTO {
+	private int cNum;
+
 	private String cName;
 	private String cRoadName;
 	private String cBranchName;
@@ -9,6 +11,12 @@ public class dataDTO {
 	private String cPhone;
 	private String cCleanName;
 	private int flag = 1;
+	public int getcNum() {
+		return cNum;
+	}
+	public void setcNum(int cNum) {
+		this.cNum = cNum;
+	}
 	public String getcPhone() {
 		return cPhone;
 	}

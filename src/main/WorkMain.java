@@ -32,8 +32,8 @@ public class WorkMain extends JFrame {
 	private Vector v; // 테이블 쿼리문
 	private Vector cols;
 	DefaultTableModel model; // 테이블 행 열
-	private JScrollPane jscp1;
-	private JTable jtable;
+	private JScrollPane jscp1, jscp2;
+	private JTable jtable, jtable2;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -90,21 +90,14 @@ public class WorkMain extends JFrame {
 
 		JComboBox coboxSearchCondition = new JComboBox();
 		coboxSearchCondition.setModel(new DefaultComboBoxModel(new String[] { "\uC774\uB984\uC73C\uB85C \uAC80\uC0C9",
-				"\uB3C4\uB85C\uBA85\uC8FC\uC18C\uB85C \uAC80\uC0C9", "\uC9C0\uBC88\uC8FC\uC18C\uB85C \uAC80\uC0C9" }));
+				"\uC804\uCCB4 \uAC80\uC0C9", "\uB3C4\uB85C\uBA85\uC8FC\uC18C\uB85C \uAC80\uC0C9",
+				"\uC9C0\uBC88\uC8FC\uC18C\uB85C \uAC80\uC0C9" }));
 		coboxSearchCondition.setBounds(37, 21, 109, 23);
 		contentPane.add(coboxSearchCondition);
 
-		JButton btnSearch = new JButton("\uAC80\uC0C9");
-		btnSearch.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnSearch.setBounds(551, 20, 63, 23);
-		contentPane.add(btnSearch);
-
-		JTextArea txt = new JTextArea();
-		txt.setBounds(161, 20, 378, 24);
-		contentPane.add(txt);
+		JTextArea txtSearch = new JTextArea();
+		txtSearch.setBounds(161, 20, 378, 24);
+		contentPane.add(txtSearch);
 
 		JButton btnNewContents = new JButton("\uC2E0\uADDC");
 		btnNewContents.addActionListener(new ActionListener() { // 신규
@@ -120,10 +113,11 @@ public class WorkMain extends JFrame {
 		btnDeleteContents.addActionListener(new ActionListener() { // 삭제
 			public void actionPerformed(ActionEvent e) {
 				int row = jtable.getSelectedRow();
-				if(row<0) return;
-				String cName = (String) jtable.getValueAt(row, 0);
+				if (row < 0)
+					return;
+				int cNum = (Integer) jtable.getValueAt(row, 0);
 
-				dao.mainDel(cName);
+				dao.mainDel(cNum);
 				jTableRefresh();
 			}
 		});
@@ -147,23 +141,54 @@ public class WorkMain extends JFrame {
 		btnExit.setBounds(1065, 400, 63, 23);
 		contentPane.add(btnExit);
 
+		JButton btnSearch = new JButton("\uAC80\uC0C9");
+		btnSearch.addActionListener(new ActionListener() { // 검색
+			public void actionPerformed(ActionEvent e) {
+				String fieldName = coboxSearchCondition.getSelectedItem().toString();
+				if (fieldName.trim().equals("전체 검색")) {// 전체검색
+					dao.seachWord(model, null, txtSearch.getText(), 1);
+					txtSearch.requestFocus();
+				}
+				if (txtSearch.getText().trim().equals("")) {
+					JOptionPane.showMessageDialog(null, "검색할 단어를 입력해주세요");
+					txtSearch.requestFocus();
+				}
+				if (fieldName.trim().equals("이름으로 검색")) {// 검색어를 입력했을경우
+					String sch = "cName";
+					dao.seachWord(model, sch, txtSearch.getText(), 1); // 테이블값, 검색조건, 검색할 단어, 삭제 되지 않은 값(메인에서)
+				}
+				if (fieldName.trim().equals("도로명주소로 검색")) {
+					String sch = "cRoadName";
+					dao.seachWord(model, sch, txtSearch.getText(), 1);
+				}
+				if (fieldName.trim().equals("지번주소로 검색")) {
+					String sch = "cBranchName";
+					dao.seachWord(model, sch, txtSearch.getText(), 1);
+				}
+			}
+		});
+		btnSearch.setBounds(551, 20, 63, 23);
+		contentPane.add(btnSearch);
+
 		JButton btnChangeContents = new JButton("\uC218\uC815");
 		btnChangeContents.addActionListener(new ActionListener() { // 수정
 			public void actionPerformed(ActionEvent e) {
-				
+
 				int row = jtable.getSelectedRow();
-				if(row<0) return;
-				String name = (String) jtable.getValueAt(row, 0);
-				String roadName = (String) jtable.getValueAt(row, 1);
-				String branchName = (String) jtable.getValueAt(row, 2);
-				String postal = (String) jtable.getValueAt(row, 3);
-				String division = (String) jtable.getValueAt(row, 4);
-				String phone = (String) jtable.getValueAt(row, 5);
-				String cleanname = (String) jtable.getValueAt(row, 6);
-				String cleanday= (String) jtable.getValueAt(row, 7);
-				
-				
-				ChangeContent chagecontent = new ChangeContent(name, roadName, branchName,postal,division,phone,cleanname,cleanday);
+				if (row < 0)
+					return;
+				int num = (int) jtable.getValueAt(row, 0);
+				String name = (String) jtable.getValueAt(row, 1);
+				String roadName = (String) jtable.getValueAt(row, 2);
+				String branchName = (String) jtable.getValueAt(row, 3);
+				String postal = (String) jtable.getValueAt(row, 4);
+				String division = (String) jtable.getValueAt(row, 5);
+				String phone = (String) jtable.getValueAt(row, 6);
+				String cleanname = (String) jtable.getValueAt(row, 7);
+				String cleanday = (String) jtable.getValueAt(row, 8);
+
+				ChangeContent chagecontent = new ChangeContent(num, name, roadName, branchName, postal, division, phone,
+						cleanname, cleanday);
 				chagecontent.setVisible(true);
 			}
 		});
@@ -231,18 +256,22 @@ public class WorkMain extends JFrame {
 		contentPane.add(btnSetManage);
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(37, 160, 1086, 222);
+		tabbedPane.setBounds(37, 119, 1086, 263);
 		contentPane.add(tabbedPane);
 
 		jtable = new JTable(model); // 테이블에 DB값
 		jscp1 = new JScrollPane(jtable); // 스크롤바
+		
+		jtable2 = new JTable(model); // 테이블에 DB값
+		jscp2 = new JScrollPane(jtable); // 스크롤바
 
 		JScrollPane jScrollPane = new JScrollPane();
 
-		tabbedPane.addTab("1", null, jScrollPane, null);
-		tabbedPane.add("2", jscp1); // 탭부분 추가
+		// tabbedPane.addTab("1", null, jScrollPane, null);
+		tabbedPane.add("전체", jscp1); // 탭부분 추가
+		tabbedPane.addTab("관리명단", null, jScrollPane, null);
 		
-		JButton btnRefresh = new JButton("\uC0C8\uB85C\uACE0\uCE68");
+		JButton btnRefresh = new JButton("\uC0C8\uB85C\uACE0\uCE68"); // 새로고침
 		btnRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				jTableRefresh();
@@ -250,7 +279,7 @@ public class WorkMain extends JFrame {
 		});
 		btnRefresh.setBounds(720, 400, 109, 23);
 		contentPane.add(btnRefresh);
-		
+
 //		if (userId == null) {
 //			JOptionPane.showMessageDialog(null, "인증되지 않은 사용자입니다.");
 //			System.exit(0);

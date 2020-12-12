@@ -39,7 +39,7 @@ public class ChangeContent extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ChangeContent frame = new ChangeContent(null, null, null, null, null, null, null, null);
+					ChangeContent frame = new ChangeContent((Integer)null,null, null, null, null, null, null, null, null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -51,7 +51,7 @@ public class ChangeContent extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public ChangeContent(String cName,String rName,String bName, String postal, String division, String phone, String cleanName, String cleanDay) {
+	public ChangeContent(int num,String cName,String rName,String bName, String postal, String division, String phone, String cleanName, String cleanDay) {
 		
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -157,7 +157,7 @@ public class ChangeContent extends JFrame {
 		btnInputOK.addActionListener(new ActionListener() {  //수정
 			public void actionPerformed(ActionEvent e) {
 				
-				
+				ddto.setcNum(num);
 				ddto.setcName(txtName.getText());
 				ddto.setcRoadName(txtRoadName.getText());
 				ddto.setcBranchName(txtBranchName.getText());
@@ -167,11 +167,11 @@ public class ChangeContent extends JFrame {
 				ddto.setcCleanName(txtCleanName.getText());
 
 				DAO dao = DAO.getInstance();
-				int result = dao.insertData(ddto);
+				int result = dao.chagetData(ddto);
 				if (result != 1) {
-					JOptionPane.showMessageDialog(null, "입력 실패");
+					JOptionPane.showMessageDialog(null, "수정 실패");
 				} else {
-					JOptionPane.showMessageDialog(null, "입력 성공");
+					JOptionPane.showMessageDialog(null, "데이터 수정 성공");
 					dispose();
 				}
 			}
