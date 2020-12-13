@@ -10,7 +10,15 @@ public class dataDTO {
 	private String cDivision;
 	private String cPhone;
 	private String cCleanName;
+	private String cCleanDay;
 	private int flag = 1;
+	public String getcCleanDay() {
+		return cCleanDay;
+	}
+	public void setcCleanDay(String cCleanDay) {
+		this.cCleanDay = cCleanDay;
+	}
+	
 	public int getcNum() {
 		return cNum;
 	}

@@ -28,6 +28,7 @@ public class NewContent extends JFrame {
 
 	DAO dao = new DAO();
 	dataDTO ddto = new dataDTO();
+	private JTextField txtCleanDay;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -45,7 +46,7 @@ public class NewContent extends JFrame {
 	public NewContent() {
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 387, 286);
+		setBounds(100, 100, 387, 278);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -88,7 +89,7 @@ public class NewContent extends JFrame {
 				dispose();
 			}
 		});
-		btnExit.setBounds(278, 201, 81, 32);
+		btnExit.setBounds(293, 190, 66, 32);
 		contentPane.add(btnExit);
 
 		JLabel lblPw_1 = new JLabel("\uC6B0\uD3B8\uBC88\uD638");
@@ -138,6 +139,7 @@ public class NewContent extends JFrame {
 				ddto.setcDivision((String) coboDivision.getSelectedItem());
 				ddto.setcPhone(txtPhone.getText());
 				ddto.setcCleanName(txtCleanName.getText());
+				ddto.setcCleanDay(txtCleanDay.getText());
 
 				DAO dao = DAO.getInstance();
 				int result = dao.insertData(ddto);
@@ -149,7 +151,16 @@ public class NewContent extends JFrame {
 				}
 			}
 		});
-		btnInputOK.setBounds(193, 201, 81, 32);
+		btnInputOK.setBounds(210, 190, 66, 32);
 		contentPane.add(btnInputOK);
+		
+		txtCleanDay = new JTextField();
+		txtCleanDay.setColumns(10);
+		txtCleanDay.setBounds(69, 201, 116, 21);
+		contentPane.add(txtCleanDay);
+		
+		JLabel lblEmail_2_1 = new JLabel("\uC18C\uB3C5 \uB0A0\uC9DC");
+		lblEmail_2_1.setBounds(12, 204, 57, 15);
+		contentPane.add(lblEmail_2_1);
 	}
 }

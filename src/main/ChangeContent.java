@@ -31,6 +31,7 @@ public class ChangeContent extends JFrame {
 	
 	DAO dao = new DAO();
 	dataDTO ddto = new dataDTO();
+	private JTextField txtCleanDay;
 
 	/**
 	 * Launch the application.
@@ -39,7 +40,7 @@ public class ChangeContent extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ChangeContent frame = new ChangeContent((Integer)null,null, null, null, null, null, null, null, null);
+					ChangeContent frame = new ChangeContent(0,"1", "2", "3","4", "5", "6", "7", "8");
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -77,7 +78,7 @@ public class ChangeContent extends JFrame {
 				dispose();
 			}
 		});
-		btnExit.setBounds(273, 205, 81, 32);
+		btnExit.setBounds(285, 205, 69, 32);
 		contentPane_1.add(btnExit);
 		
 		
@@ -95,7 +96,7 @@ public class ChangeContent extends JFrame {
 		lblEmail.setBounds(12, 144, 57, 15);
 		contentPane_1.add(lblEmail);
 		
-		JLabel lblEmail_2 = new JLabel("\uC18C\uB3C5\uC5C5\uCCB4");
+		JLabel lblEmail_2 = new JLabel("\uC18C\uB3C5 \uC5C5\uCCB4");
 		lblEmail_2.setBounds(12, 179, 57, 15);
 		contentPane_1.add(lblEmail_2);
 		
@@ -144,14 +145,21 @@ public class ChangeContent extends JFrame {
 				"종교집회장", "문화집회시설", "아파트", "학교", "지하철", "식품접객업" }));
 		coboDivision.setBounds(243, 113, 111, 21);
 		contentPane_1.add(coboDivision);
+
+		txtCleanDay = new JTextField();
+		txtCleanDay.setColumns(10);
+		txtCleanDay.setBounds(69, 211, 116, 21);
+		contentPane_1.add(txtCleanDay);
+
 		
 		txtName.setText(cName);
 		txtRoadName.setText(rName);
 		txtBranchName.setText(bName);
 		txtPostal.setText(postal);
-		//coboDivision.sele;
+		coboDivision.setSelectedItem(division);
 		txtPhone.setText(phone);
 		txtCleanName.setText(cleanName);
+		txtCleanDay.setText(cleanDay);
 		
 		JButton btnInputOK = new JButton("\uD655\uC778");
 		btnInputOK.addActionListener(new ActionListener() {  //수정
@@ -165,7 +173,9 @@ public class ChangeContent extends JFrame {
 				ddto.setcDivision((String) coboDivision.getSelectedItem());
 				ddto.setcPhone(txtPhone.getText());
 				ddto.setcCleanName(txtCleanName.getText());
-
+				ddto.setcCleanDay(txtCleanDay.getText());
+				
+				
 				DAO dao = DAO.getInstance();
 				int result = dao.chagetData(ddto);
 				if (result != 1) {
@@ -176,7 +186,13 @@ public class ChangeContent extends JFrame {
 				}
 			}
 		});
-		btnInputOK.setBounds(185, 205, 81, 32);
+		btnInputOK.setBounds(204, 205, 69, 32);
 		contentPane_1.add(btnInputOK);
+		
+		JLabel lblEmail_2_1 = new JLabel("\uC18C\uB3C5 \uB0A0\uC9DC");
+		lblEmail_2_1.setBounds(12, 214, 57, 15);
+		contentPane_1.add(lblEmail_2_1);
+		
+		
 	}
 }

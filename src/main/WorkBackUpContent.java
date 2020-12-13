@@ -49,11 +49,6 @@ public class WorkBackUpContent extends JFrame {
 		});
 	}
 
-	public void jTableRefresh() {
-		DefaultTableModel model = new DefaultTableModel(dao.showBackupData(), dao.getColimn());
-		jtable.setModel(model);
-	}
-
 	public WorkBackUpContent() {
 		v = dao.showBackupData(); // 테이블 DB
 		cols = dao.getColimn();
@@ -154,10 +149,11 @@ public class WorkBackUpContent extends JFrame {
 		btnSearch.setBounds(526, 10, 63, 23);
 		contentPane.add(btnSearch);
 
-		JButton btnRefresh = new JButton("\uAC80\uC0C9 \uCD08\uAE30\uD654");
+		JButton btnRefresh = new JButton("\uAC80\uC0C9 \uCD08\uAE30\uD654"); //초기화 
 		btnRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				jTableRefresh();
+			
+				dao.reset(model, 0);
 			}
 		});
 		btnRefresh.setBounds(592, 11, 116, 23);

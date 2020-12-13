@@ -55,6 +55,8 @@ public class SetManage extends JFrame {
 	 * Create the frame.
 	 */
 	public SetManage() {
+	
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 449, 360);
 		contentPane = new JPanel();
@@ -69,6 +71,7 @@ public class SetManage extends JFrame {
 		JButton btnExit = new JButton("\uCDE8\uC18C"); // 취소
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 				dispose();
 			}
 		});
@@ -78,6 +81,7 @@ public class SetManage extends JFrame {
 		JButton btnOk = new JButton("\uD655\uC778"); // 확인
 		btnOk.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 				if (txt1.getText().trim().equals("") && txt2.getText().trim().equals("")
 						&& txt3.getText().trim().equals("") && txt4.getText().trim().equals("")
 						&& txt5.getText().trim().equals("") && txt6.getText().trim().equals("")
@@ -86,19 +90,21 @@ public class SetManage extends JFrame {
 						&& txt11.getText().trim().equals("") && txt12.getText().trim().equals("")) {
 					JOptionPane.showMessageDialog(null, "날짜를 입력해주세요 ");
 				} else {
-					dao.timeSet(1, txt1.getText(), dao.toDay());
-					dao.timeSet(2, txt2.getText(), dao.toDay());
-					dao.timeSet(3, txt3.getText(), dao.toDay());
-					dao.timeSet(4, txt4.getText(), dao.toDay());
-					dao.timeSet(5, txt5.getText(), dao.toDay());
-					dao.timeSet(6, txt6.getText(), dao.toDay());
-					dao.timeSet(7, txt7.getText(), dao.toDay());
-					dao.timeSet(8, txt8.getText(), dao.toDay());
-					dao.timeSet(9, txt9.getText(), dao.toDay());
-					dao.timeSet(10, txt10.getText(), dao.toDay());
-					dao.timeSet(11, txt11.getText(), dao.toDay());
-					dao.timeSet(12, txt12.getText(), dao.toDay());
-					dispose();
+					dao.timeSet(1, txt1.getText());
+					dao.timeSet(2, txt2.getText());
+					dao.timeSet(3, txt3.getText());
+					dao.timeSet(4, txt4.getText());
+					dao.timeSet(5, txt5.getText());
+					dao.timeSet(6, txt6.getText());
+					dao.timeSet(7, txt7.getText());
+					dao.timeSet(8, txt8.getText());
+					dao.timeSet(9, txt9.getText());
+					dao.timeSet(10, txt10.getText());
+					dao.timeSet(11, txt11.getText());
+					dao.timeSet(12, txt12.getText());
+					
+					
+					
 				}
 			}
 		});
@@ -202,14 +208,13 @@ public class SetManage extends JFrame {
 		txt10 = new JTextField();
 		txt10.setColumns(10);
 		txt10.setBounds(306, 108, 115, 21);
-
 		contentPane.add(txt10);
 
 		txt9 = new JTextField();
 		txt9.setColumns(10);
 		txt9.setBounds(306, 73, 115, 21);
-		
 		contentPane.add(txt9);
+		
 		txt8 = new JTextField();
 		txt8.setColumns(10);
 		txt8.setBounds(306, 40, 115, 21);

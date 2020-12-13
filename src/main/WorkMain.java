@@ -3,6 +3,9 @@ package main;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.sql.Date;
 import java.util.Vector;
 
@@ -22,16 +25,17 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import db.DAO;
+import db.dataDTO;
 import sub.Login;
 
 public class WorkMain extends JFrame {
 	DAO dao = new DAO();
+	dataDTO ddto = new dataDTO();
 	private JPanel contentPane;
 	private JTextField txtDay;
 
-	private Vector v; // 테이블 쿼리문
-	private Vector cols;
-	DefaultTableModel model; // 테이블 행 열
+
+	static DefaultTableModel model, model2; // 테이블, model은 전체 ,model2는 관리명단
 	private JScrollPane jscp1, jscp2;
 	private JTable jtable, jtable2;
 
@@ -48,16 +52,10 @@ public class WorkMain extends JFrame {
 		});
 	}
 
-	public void jTableRefresh() {
-		DefaultTableModel model = new DefaultTableModel(dao.showAllTable(), dao.getColimn());
-		jtable.setModel(model);
-	}
-
 	public WorkMain(String userId) {
 
-		v = dao.showAllTable();
-		cols = dao.getColimn();
-		model = new DefaultTableModel(v, cols);
+		model = new DefaultTableModel(dao.showAllTable(), dao.getColimn());
+		model2 = new DefaultTableModel(dao.manageShow(), dao.getColimn());
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1156, 478);
@@ -78,6 +76,14 @@ public class WorkMain extends JFrame {
 
 		btnLogOut.setBounds(1033, 20, 95, 23);
 		contentPane.add(btnLogOut);
+		
+		JLabel lblNum = new JLabel("");
+		lblNum.setBounds(12, 94, 57, 23);
+		contentPane.add(lblNum);
+		
+		JLabel lblNewLabel_4_3_1 = new JLabel("No");
+		lblNewLabel_4_3_1.setBounds(12, 69, 57, 23);
+		contentPane.add(lblNewLabel_4_3_1);
 
 		JLabel lbluserName = new JLabel("\uAE40\uC694\uD55C\uB2D8");
 		lbluserName.setBounds(964, 24, 57, 15);
@@ -118,22 +124,14 @@ public class WorkMain extends JFrame {
 				int cNum = (Integer) jtable.getValueAt(row, 0);
 
 				dao.mainDel(cNum);
-				jTableRefresh();
+				dao.reset(model, 1);
 			}
 		});
 		btnDeleteContents.setBounds(916, 400, 63, 23);
 		contentPane.add(btnDeleteContents);
 
-		JButton btnInputContent = new JButton("\uC785\uB825");
-		btnInputContent.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnInputContent.setBounds(790, 86, 69, 23);
-		contentPane.add(btnInputContent);
-
 		JButton btnExit = new JButton("\uC885\uB8CC");
-		btnExit.addActionListener(new ActionListener() {
+		btnExit.addActionListener(new ActionListener() { //종료
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
 			}
@@ -145,12 +143,14 @@ public class WorkMain extends JFrame {
 		btnSearch.addActionListener(new ActionListener() { // 검색
 			public void actionPerformed(ActionEvent e) {
 				String fieldName = coboxSearchCondition.getSelectedItem().toString();
-				if (fieldName.trim().equals("전체 검색")) {// 전체검색
-					dao.seachWord(model, null, txtSearch.getText(), 1);
-					txtSearch.requestFocus();
-				}
 				if (txtSearch.getText().trim().equals("")) {
 					JOptionPane.showMessageDialog(null, "검색할 단어를 입력해주세요");
+					txtSearch.requestFocus();
+					dao.seachWord(model, null, txtSearch.getText(), 1);
+				}
+				if (fieldName.trim().equals("전체 검색")) {// 전체검색
+					dao.seachWord(model, null, txtSearch.getText(), 1);
+					//dao.seachWord(model2, null, txtSearch.getText(), 1);
 					txtSearch.requestFocus();
 				}
 				if (fieldName.trim().equals("이름으로 검색")) {// 검색어를 입력했을경우
@@ -186,6 +186,7 @@ public class WorkMain extends JFrame {
 				String phone = (String) jtable.getValueAt(row, 6);
 				String cleanname = (String) jtable.getValueAt(row, 7);
 				String cleanday = (String) jtable.getValueAt(row, 8);
+				
 
 				ChangeContent chagecontent = new ChangeContent(num, name, roadName, branchName, postal, division, phone,
 						cleanname, cleanday);
@@ -195,44 +196,37 @@ public class WorkMain extends JFrame {
 		btnChangeContents.setBounds(990, 400, 63, 23);
 		contentPane.add(btnChangeContents);
 
-		JLabel lblRoadNameAddress = new JLabel("\uB9C8\uD3EC\uAD6C \uC6D4\uB4DC\uCEF5\uB85C 120 1\uCE35");
-		lblRoadNameAddress.setBounds(196, 90, 164, 15);
-		contentPane.add(lblRoadNameAddress);
+		JLabel lblRoadName = new JLabel("");
+		lblRoadName.setBounds(216, 94, 164, 15);
+		contentPane.add(lblRoadName);
 
-		JLabel lblDisinfectionTarget = new JLabel("7\uBC88\uAC00 \uD53C\uC790 \uC11C\uAD50\uB9DD\uC6D0\uC810");
-		lblDisinfectionTarget.setBounds(47, 90, 152, 15);
-		contentPane.add(lblDisinfectionTarget);
-
-		JComboBox coboxMonth = new JComboBox();
-		coboxMonth.setModel(new DefaultComboBoxModel(new String[] { "1\uC6D4", "2\uC6D4", "3\uC6D4", "4\uC6D4",
-				"5\uC6D4", "6\uC6D4", "7\uC6D4", "8\uC6D4", "9\uC6D4", "10\uC6D4", "11\uC6D4", "12\uC6D4" }));
-		coboxMonth.setBounds(552, 86, 85, 23);
-		contentPane.add(coboxMonth);
+		JLabel lblName = new JLabel("");
+		lblName.setBounds(67, 94, 152, 15);
+		contentPane.add(lblName);
 
 		txtDay = new JTextField();
-		txtDay.setText("22");
-		txtDay.setBounds(671, 88, 69, 21);
+		txtDay.setBounds(576, 88, 164, 21);
 		contentPane.add(txtDay);
 		txtDay.setColumns(10);
 
-		JLabel lblNewLabel_3 = new JLabel("\uC77C");
-		lblNewLabel_3.setBounds(752, 94, 26, 15);
+		JLabel lblNewLabel_3 = new JLabel("\uB0A0\uC9DC");
+		lblNewLabel_3.setBounds(561, 69, 26, 15);
 		contentPane.add(lblNewLabel_3);
 
-		JLabel lblBranchAddress = new JLabel("\uB9C8\uD3EC\uAD6C \uC6D4\uB4DC\uCEF5\uB85C 120 1\uCE35");
-		lblBranchAddress.setBounds(372, 90, 152, 15);
-		contentPane.add(lblBranchAddress);
+		JLabel lblBranchName = new JLabel("");
+		lblBranchName.setBounds(392, 94, 152, 15);
+		contentPane.add(lblBranchName);
 
 		JLabel lblNewLabel_4 = new JLabel("\uC774\uB984");
-		lblNewLabel_4.setBounds(37, 65, 57, 23);
+		lblNewLabel_4.setBounds(57, 69, 57, 23);
 		contentPane.add(lblNewLabel_4);
 
 		JLabel lblNewLabel_4_1 = new JLabel("\uC9C0\uBC88 \uC8FC\uC18C");
-		lblNewLabel_4_1.setBounds(362, 65, 85, 23);
+		lblNewLabel_4_1.setBounds(382, 69, 85, 23);
 		contentPane.add(lblNewLabel_4_1);
 
 		JLabel lblNewLabel_4_2 = new JLabel("\uB3C4\uB85C\uBA85 \uC8FC\uC18C");
-		lblNewLabel_4_2.setBounds(187, 65, 95, 23);
+		lblNewLabel_4_2.setBounds(207, 69, 95, 23);
 		contentPane.add(lblNewLabel_4_2);
 
 		JButton btnBackContents = new JButton("\uC0AD\uC81C\uAE30\uB85D"); // 삭제내역
@@ -240,6 +234,7 @@ public class WorkMain extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				WorkBackUpContent backupContent = new WorkBackUpContent();
 				backupContent.setVisible(true);
+				
 			}
 		});
 		btnBackContents.setBounds(1033, 53, 95, 23);
@@ -250,6 +245,7 @@ public class WorkMain extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				SetManage sManage = new SetManage();
 				sManage.setVisible(true);
+
 			}
 		});
 		btnSetManage.setBounds(1033, 86, 95, 23);
@@ -261,25 +257,93 @@ public class WorkMain extends JFrame {
 
 		jtable = new JTable(model); // 테이블에 DB값
 		jscp1 = new JScrollPane(jtable); // 스크롤바
-		
-		jtable2 = new JTable(model); // 테이블에 DB값
-		jscp2 = new JScrollPane(jtable); // 스크롤바
+
+		jtable2 = new JTable(model2); // 테이블에 DB값
+		jscp2 = new JScrollPane(jtable2); // 스크롤바
 
 		JScrollPane jScrollPane = new JScrollPane();
 
-		// tabbedPane.addTab("1", null, jScrollPane, null);
 		tabbedPane.add("전체", jscp1); // 탭부분 추가
-		tabbedPane.addTab("관리명단", null, jScrollPane, null);
-		
+		tabbedPane.addTab("관리명단", jscp2);
+
 		JButton btnRefresh = new JButton("\uC0C8\uB85C\uACE0\uCE68"); // 새로고침
 		btnRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				jTableRefresh();
+				dao.reset(model, 1);
+				model2 = new DefaultTableModel(dao.manageShow(), dao.getColimn());
+				dao.reset(model2, 1);
+
 			}
 		});
 		btnRefresh.setBounds(720, 400, 109, 23);
 		contentPane.add(btnRefresh);
 
+		JButton btnInputContent = new JButton("\uC785\uB825");
+		btnInputContent.addActionListener(new ActionListener() { // 입력
+			public void actionPerformed(ActionEvent e) {
+				int row = jtable.getSelectedRow();
+				if (row < 0)
+					return;
+				
+				System.out.println(row);
+				ddto.setcNum((int) jtable.getValueAt(row, 0));
+//				ddto.setcName((String) jtable.getValueAt(row, 1));
+//				ddto.setcRoadName((String) jtable.getValueAt(row, 2));
+//				ddto.setcBranchName((String) jtable.getValueAt(row, 3));
+//				ddto.setcPostal((String) jtable.getValueAt(row, 4));
+//				ddto.setcDivision((String) jtable.getValueAt(row, 5));
+//				ddto.setcPhone((String) jtable.getValueAt(row, 6));
+//				ddto.setcCleanName((String) jtable.getValueAt(row, 7));
+				ddto.setcCleanDay((String) jtable.getValueAt(row, 8));
+				
+//				String num = lblNum.getText();
+//				String name = (String) jtable.getValueAt(row, 1);
+//				String roadName = (String) jtable.getValueAt(row, 2);
+//				String branchName = (String) jtable.getValueAt(row, 3);
+//				String postal = (String) jtable.getValueAt(row, 4);
+//				String division = (String) jtable.getValueAt(row, 5);
+//				String phone = (String) jtable.getValueAt(row, 6);
+//				String cleanname = (String) jtable.getValueAt(row, 7);
+				String cleanday = txtDay.getText();
+				
+				
+				
+				DAO ddao = DAO.getInstance();
+				int result = ddao.mainInsertData(ddto.getcNum(), ddto.getcCleanDay());
+				if (result != 1) {
+					JOptionPane.showMessageDialog(null, "수정 실패");
+				} else {
+					JOptionPane.showMessageDialog(null, "입력 성공");
+					dao.reset(model, 1);
+				}
+				
+				
+
+			}
+		});
+		btnInputContent.setBounds(752, 86, 69, 23);
+		contentPane.add(btnInputContent);
+		
+
+		jtable.addMouseListener(new java.awt.event.MouseAdapter() { // 테이블 선택 입력버튼 옆에 라벨에 넣어주는 것
+			@Override
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
+				int row = jtable.getSelectedRow();
+				long num = (int) jtable.getValueAt(row, 0);
+				String name = (String) jtable.getValueAt(row, 1);
+				String roadName = (String) jtable.getValueAt(row, 2);
+				String branchName = (String) jtable.getValueAt(row, 3);
+				String cleanday = (String) jtable.getValueAt(row, 8);
+				
+		
+				//lblNum.setText(num);
+				lblName.setText(name);
+				lblRoadName.setText(roadName);
+				lblBranchName.setText(branchName);
+				txtDay.setText(cleanday);
+			}
+		});
+		
 //		if (userId == null) {
 //			JOptionPane.showMessageDialog(null, "인증되지 않은 사용자입니다.");
 //			System.exit(0);
