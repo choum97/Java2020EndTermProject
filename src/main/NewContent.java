@@ -14,7 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import db.DAO;
-import db.dataDTO;
+import db.DataDTO;
 
 public class NewContent extends JFrame {
 
@@ -27,7 +27,7 @@ public class NewContent extends JFrame {
 	private JTextField txtBranchName;
 
 	DAO dao = new DAO();
-	dataDTO ddto = new dataDTO();
+	DataDTO ddto = new DataDTO();
 	private JTextField txtCleanDay;
 
 	public static void main(String[] args) {
@@ -132,6 +132,7 @@ public class NewContent extends JFrame {
 		JButton btnInputOK = new JButton("\uD655\uC778");
 		btnInputOK.addActionListener(new ActionListener() { // »Æ¿Œ
 			public void actionPerformed(ActionEvent e) {
+				
 				ddto.setcName(txtName.getText());
 				ddto.setcRoadName(txtRoadName.getText());
 				ddto.setcBranchName(txtBranchName.getText());

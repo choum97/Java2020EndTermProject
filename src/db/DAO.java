@@ -423,6 +423,7 @@ public class DAO {
 				row.add(cCleanDay);
 				data.add(row);
 			}
+			rs.first();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -485,9 +486,8 @@ public class DAO {
 		return col;
 	}
 	
-	// 백업창 테이블
 
-// 메인에서 삭제버튼으로 flag가 0으로 변경된 DB 값들 가져오기
+	// 메인에서 삭제버튼으로 flag가 0으로 변경된 DB 값들 가져오기
 	public Vector showBackupData() {
 		Vector data = new Vector();
 		try {
@@ -528,7 +528,7 @@ public class DAO {
 	}
 	
 
-// 삭재내역에서 삭제 - DB에서 데이터 삭제
+	// 삭재내역에서 삭제 - DB에서 데이터 삭제
 	public void delete(int cNum) {
 		try {
 			openCon();
@@ -547,9 +547,9 @@ public class DAO {
 		}
 	}
 	
-	// 백업창에서 메인으로 복구
 
-// 삭제내역에서 다시 메인에 테이블로 복원시켜주기
+
+	// 삭제내역에서 다시 메인에 테이블로 복원시켜주기
 	public void mainReturn(int cNum) {
 		try {
 			openCon();
@@ -587,9 +587,9 @@ public class DAO {
 		}
 	}
 
-	// 소독 실정 명단에 데이터 추가
+	// 소독실적 명단에 추가
 	static int resultData;
-	public int insertData(dataDTO ddto) {
+	public int insertData(DataDTO ddto) {
 		openCon();
 		try {
 			String query1 = "insert into disinfection_target_list(cName, cRoadName,cBranchName,cPostal,cDivision,cPhone,cCleanName,cCleanDay,flag) value(?,?,?,?,?,?,?,?,?)";
@@ -615,7 +615,7 @@ public class DAO {
 	}
 
 	// 소독 실적 명단 데이터 수정
-	public int chagetData(dataDTO ddto) {
+	public int chagetData(DataDTO ddto) {
 		try {
 			openCon();
 
@@ -641,26 +641,15 @@ public class DAO {
 		return resultData;
 	}
 	
-	// 소독 실정 명단에 데이터 추가
-	public int mainInsertData(int i, String cleanDay) {
+	// 메인에서 실적입력
+	public int mainInsertData(String cleanDay,int num) {
 		openCon();
 		try {
-			String query1 = "UPDATE disinfection_target_list SET cCleanDay=? WHERE cNum = ?";
-			psmt = con.prepareStatement(query1);
-//			psmt.setString(1, ddto.getcName());
-//			psmt.setString(2, ddto.getcRoadName());
-//			psmt.setString(3, ddto.getcBranchName());
-//			psmt.setString(4, ddto.getcPostal());
-//			psmt.setString(5, ddto.getcDivision());
-//			psmt.setString(6, ddto.getcPhone());
-//			psmt.setString(7, ddto.getcCleanName());
-//			psmt.setString(8, ddto.getcCleanDay());
-//			psmt.setInt(9, ddto.getFlag());
-//			psmt.setInt(10, ddto.getcNum());
+			String query2 = "UPDATE disinfection_target_list SET cCleanDay = ? WHERE cNum = ?";
+			psmt = con.prepareStatement(query2);
 
 			psmt.setString(1, cleanDay);
-
-			psmt.setInt(2, i);
+			psmt.setInt(2, num);
 			
 			int excuteQuery = psmt.executeUpdate();// 성공하면 1반환
 			resultData = excuteQuery;

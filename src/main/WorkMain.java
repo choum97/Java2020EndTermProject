@@ -25,15 +25,14 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import db.DAO;
-import db.dataDTO;
+import db.DataDTO;
 import sub.Login;
 
 public class WorkMain extends JFrame {
 	DAO dao = new DAO();
-	dataDTO ddto = new dataDTO();
+	DataDTO ddto = new DataDTO();
 	private JPanel contentPane;
 	private JTextField txtDay;
-
 
 	static DefaultTableModel model, model2; // 테이블, model은 전체 ,model2는 관리명단
 	private JScrollPane jscp1, jscp2;
@@ -50,6 +49,12 @@ public class WorkMain extends JFrame {
 				}
 			}
 		});
+	}
+
+	public void jTable2Refresh() {
+		DefaultTableModel model2 = new DefaultTableModel(dao.manageShow(), dao.getColimn());
+		jtable2.setModel(model2);
+
 	}
 
 	public WorkMain(String userId) {
@@ -76,14 +81,6 @@ public class WorkMain extends JFrame {
 
 		btnLogOut.setBounds(1033, 20, 95, 23);
 		contentPane.add(btnLogOut);
-		
-		JLabel lblNum = new JLabel("");
-		lblNum.setBounds(12, 94, 57, 23);
-		contentPane.add(lblNum);
-		
-		JLabel lblNewLabel_4_3_1 = new JLabel("No");
-		lblNewLabel_4_3_1.setBounds(12, 69, 57, 23);
-		contentPane.add(lblNewLabel_4_3_1);
 
 		JLabel lbluserName = new JLabel("\uAE40\uC694\uD55C\uB2D8");
 		lbluserName.setBounds(964, 24, 57, 15);
@@ -251,6 +248,8 @@ public class WorkMain extends JFrame {
 		btnSetManage.setBounds(1033, 86, 95, 23);
 		contentPane.add(btnSetManage);
 
+		
+		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(37, 119, 1086, 263);
 		contentPane.add(tabbedPane);
@@ -270,9 +269,7 @@ public class WorkMain extends JFrame {
 		btnRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dao.reset(model, 1);
-				model2 = new DefaultTableModel(dao.manageShow(), dao.getColimn());
-				dao.reset(model2, 1);
-
+				jTable2Refresh();
 			}
 		});
 		btnRefresh.setBounds(720, 400, 109, 23);
@@ -285,31 +282,10 @@ public class WorkMain extends JFrame {
 				if (row < 0)
 					return;
 				
-				System.out.println(row);
 				ddto.setcNum((int) jtable.getValueAt(row, 0));
-//				ddto.setcName((String) jtable.getValueAt(row, 1));
-//				ddto.setcRoadName((String) jtable.getValueAt(row, 2));
-//				ddto.setcBranchName((String) jtable.getValueAt(row, 3));
-//				ddto.setcPostal((String) jtable.getValueAt(row, 4));
-//				ddto.setcDivision((String) jtable.getValueAt(row, 5));
-//				ddto.setcPhone((String) jtable.getValueAt(row, 6));
-//				ddto.setcCleanName((String) jtable.getValueAt(row, 7));
-				ddto.setcCleanDay((String) jtable.getValueAt(row, 8));
-				
-//				String num = lblNum.getText();
-//				String name = (String) jtable.getValueAt(row, 1);
-//				String roadName = (String) jtable.getValueAt(row, 2);
-//				String branchName = (String) jtable.getValueAt(row, 3);
-//				String postal = (String) jtable.getValueAt(row, 4);
-//				String division = (String) jtable.getValueAt(row, 5);
-//				String phone = (String) jtable.getValueAt(row, 6);
-//				String cleanname = (String) jtable.getValueAt(row, 7);
 				String cleanday = txtDay.getText();
+				int result = dao.mainInsertData(cleanday,ddto.getcNum());
 				
-				
-				
-				DAO ddao = DAO.getInstance();
-				int result = ddao.mainInsertData(ddto.getcNum(), ddto.getcCleanDay());
 				if (result != 1) {
 					JOptionPane.showMessageDialog(null, "수정 실패");
 				} else {
@@ -323,20 +299,21 @@ public class WorkMain extends JFrame {
 		});
 		btnInputContent.setBounds(752, 86, 69, 23);
 		contentPane.add(btnInputContent);
-		
+
 
 		jtable.addMouseListener(new java.awt.event.MouseAdapter() { // 테이블 선택 입력버튼 옆에 라벨에 넣어주는 것
 			@Override
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
 				int row = jtable.getSelectedRow();
-				long num = (int) jtable.getValueAt(row, 0);
+				int num = (int) jtable.getValueAt(row, 0);
 				String name = (String) jtable.getValueAt(row, 1);
 				String roadName = (String) jtable.getValueAt(row, 2);
 				String branchName = (String) jtable.getValueAt(row, 3);
 				String cleanday = (String) jtable.getValueAt(row, 8);
 				
-		
-				//lblNum.setText(num);
+				ddto.setcNum(num);
+				ddto.setcCleanDay(cleanday);
+				
 				lblName.setText(name);
 				lblRoadName.setText(roadName);
 				lblBranchName.setText(branchName);

@@ -1,6 +1,6 @@
 package db;
 
-public class dataDTO {
+public class DataDTO {
 	private int cNum;
 
 	private String cName;

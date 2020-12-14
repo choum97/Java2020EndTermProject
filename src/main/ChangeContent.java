@@ -17,7 +17,7 @@ import javax.swing.border.EmptyBorder;
 import javax.xml.crypto.Data;
 
 import db.DAO;
-import db.dataDTO;
+import db.DataDTO;
 
 public class ChangeContent extends JFrame {
 
@@ -30,7 +30,7 @@ public class ChangeContent extends JFrame {
 	private JTextField txtName;
 	
 	DAO dao = new DAO();
-	dataDTO ddto = new dataDTO();
+	DataDTO ddto = new DataDTO();
 	private JTextField txtCleanDay;
 
 	/**

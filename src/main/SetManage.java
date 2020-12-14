@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import db.DAO;
-import db.dataDTO;
+import db.DataDTO;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -103,8 +103,7 @@ public class SetManage extends JFrame {
 					dao.timeSet(11, txt11.getText());
 					dao.timeSet(12, txt12.getText());
 					
-					
-					
+					dispose();
 				}
 			}
 		});
