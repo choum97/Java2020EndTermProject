@@ -1,6 +1,5 @@
 package db;
 
-import java.io.ObjectInputStream.GetField;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -587,6 +586,7 @@ public class DAO {
 	public int insertData(DataDTO ddto) {
 		openCon();
 		try {
+
 			String query1 = "insert into disinfection_target_list(cName, cRoadName,cBranchName,cPostal,cDivision,cPhone,cCleanName,cCleanDay,flag) value(?,?,?,?,?,?,?,?,?)";
 			psmt = con.prepareStatement(query1);
 			psmt.setString(1, ddto.getcName());
@@ -598,6 +598,10 @@ public class DAO {
 			psmt.setString(7, ddto.getcCleanName());
 			psmt.setString(8, ddto.getcCleanDay());
 			psmt.setInt(9, 1);
+
+			if (ddto.getcCleanDay().trim().equals("")) {
+
+			}
 
 			int excuteQuery = psmt.executeUpdate();// 성공하면 1반환
 			resultData = excuteQuery;

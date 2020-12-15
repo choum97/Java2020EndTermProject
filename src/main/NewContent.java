@@ -132,34 +132,42 @@ public class NewContent extends JFrame {
 		JButton btnInputOK = new JButton("\uD655\uC778");
 		btnInputOK.addActionListener(new ActionListener() { // 확인
 			public void actionPerformed(ActionEvent e) {
-				
-				ddto.setcName(txtName.getText());
-				ddto.setcRoadName(txtRoadName.getText());
-				ddto.setcBranchName(txtBranchName.getText());
-				ddto.setcPostal(txtPostal.getText());
-				ddto.setcDivision((String) coboDivision.getSelectedItem());
-				ddto.setcPhone(txtPhone.getText());
-				ddto.setcCleanName(txtCleanName.getText());
-				ddto.setcCleanDay(txtCleanDay.getText());
 
-				DAO dao = DAO.getInstance();
-				int result = dao.insertData(ddto);
-				if (result != 1) {
-					JOptionPane.showMessageDialog(null, "입력 실패");
+				if (txtName.getText().trim().equals("") || txtRoadName.getText().trim().equals("")
+						|| txtBranchName.getText().trim().equals("") || txtPostal.getText().trim().equals("")) {
+					JOptionPane.showMessageDialog(null, "필수사항을 입력해주세요(이름, 도로명, 지번, 우편번호)");
+				} else if (txtCleanDay.getText().trim().equals("")) {
+					JOptionPane.showMessageDialog(null, "소독일자가 입력되지 않았습니다 임시로 지정하시겠습니까?");
+					txtCleanDay.setText("00000000");
 				} else {
-					JOptionPane.showMessageDialog(null, "입력 성공");
-					dispose();
+					ddto.setcName(txtName.getText());
+					ddto.setcRoadName(txtRoadName.getText());
+					ddto.setcBranchName(txtBranchName.getText());
+					ddto.setcPostal(txtPostal.getText());
+					ddto.setcDivision((String) coboDivision.getSelectedItem());
+					ddto.setcPhone(txtPhone.getText());
+					ddto.setcCleanName(txtCleanName.getText());
+					ddto.setcCleanDay(txtCleanDay.getText());
+
+					DAO dao = DAO.getInstance();
+					int result = dao.insertData(ddto);
+					if (result != 1) {
+						JOptionPane.showMessageDialog(null, "입력 실패");
+					} else {
+						JOptionPane.showMessageDialog(null, "입력 성공");
+						dispose();
+					}
 				}
 			}
 		});
 		btnInputOK.setBounds(210, 190, 66, 32);
 		contentPane.add(btnInputOK);
-		
+
 		txtCleanDay = new JTextField();
 		txtCleanDay.setColumns(10);
 		txtCleanDay.setBounds(69, 201, 116, 21);
 		contentPane.add(txtCleanDay);
-		
+
 		JLabel lblEmail_2_1 = new JLabel("\uC18C\uB3C5 \uB0A0\uC9DC");
 		lblEmail_2_1.setBounds(12, 204, 57, 15);
 		contentPane.add(lblEmail_2_1);
