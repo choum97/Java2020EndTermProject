@@ -342,10 +342,10 @@ public class WorkMain extends JFrame {
 			}
 		});
 
-		if (userId == null) {
-			JOptionPane.showMessageDialog(null, "인증되지 않은 사용자입니다.");
-			System.exit(0);
-		}
+//		if (userId == null) {
+//			JOptionPane.showMessageDialog(null, "인증되지 않은 사용자입니다.");
+//			System.exit(0);
+//		}
 
 	}
 }
