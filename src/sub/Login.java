@@ -22,8 +22,7 @@ public class Login extends JFrame {
 	private JPanel contentPane;
 	private JTextField txtId, txtPw;
 
-	DAO testDB = new DAO();
-
+	DAO dao = new DAO();
 
 	public static void main(String[] args) {
 

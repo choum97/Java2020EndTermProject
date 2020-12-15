@@ -125,7 +125,7 @@ public class WorkBackUpContent extends JFrame {
 				String fieldName = coboxSearchCondition.getSelectedItem().toString();
 
 				if (fieldName.trim().equals("전체 검색")) {// 전체검색
-					dao.seachWord(model, null, txtSearch.getText(), 0);
+					dao.searchWord(model, null, txtSearch.getText(), 0);
 					txtSearch.requestFocus();
 				}
 				if (txtSearch.getText().trim().equals("")) {
@@ -134,15 +134,15 @@ public class WorkBackUpContent extends JFrame {
 				}
 				if (fieldName.trim().equals("이름으로 검색")) {// 검색어를 입력했을경우
 					String sch = "cName";
-					dao.seachWord(model, sch, txtSearch.getText(), 0); // 테이블값, 검색조건, 검색할 단어, 삭제 된 값(메인에서)
+					dao.searchWord(model, sch, txtSearch.getText(), 0); // 테이블값, 검색조건, 검색할 단어, 삭제 된 값(메인에서)
 				}
 				if (fieldName.trim().equals("도로명주소로 검색")) {
 					String sch = "cRoadName";
-					dao.seachWord(model, sch, txtSearch.getText(), 0);
+					dao.searchWord(model, sch, txtSearch.getText(), 0);
 				}
 				if (fieldName.trim().equals("지번주소로 검색")) {
 					String sch = "cBranchName";
-					dao.seachWord(model, sch, txtSearch.getText(), 0);
+					dao.searchWord(model, sch, txtSearch.getText(), 0);
 				}
 			}
 		});

@@ -485,7 +485,6 @@ public class DAO {
 
 		return col;
 	}
-	
 
 	// 메인에서 삭제버튼으로 flag가 0으로 변경된 DB 값들 가져오기
 	public Vector showBackupData() {
@@ -526,7 +525,6 @@ public class DAO {
 		closeCon();
 		return data;
 	}
-	
 
 	// 삭재내역에서 삭제 - DB에서 데이터 삭제
 	public void delete(int cNum) {
@@ -546,8 +544,6 @@ public class DAO {
 			e.printStackTrace();
 		}
 	}
-	
-
 
 	// 삭제내역에서 다시 메인에 테이블로 복원시켜주기
 	public void mainReturn(int cNum) {
@@ -569,8 +565,6 @@ public class DAO {
 			closeCon();
 		}
 	}
-	
-	
 
 	// 메인 테이블에서 안 보이게하기 - DB값 삭제 X
 	public void mainDel(int cNum) {
@@ -589,6 +583,7 @@ public class DAO {
 
 	// 소독실적 명단에 추가
 	static int resultData;
+
 	public int insertData(DataDTO ddto) {
 		openCon();
 		try {
@@ -640,9 +635,9 @@ public class DAO {
 		}
 		return resultData;
 	}
-	
+
 	// 메인에서 실적입력
-	public int mainInsertData(String cleanDay,int num) {
+	public int mainInsertData(String cleanDay, int num) {
 		openCon();
 		try {
 			String query2 = "UPDATE disinfection_target_list SET cCleanDay = ? WHERE cNum = ?";
@@ -650,7 +645,7 @@ public class DAO {
 
 			psmt.setString(1, cleanDay);
 			psmt.setInt(2, num);
-			
+
 			int excuteQuery = psmt.executeUpdate();// 성공하면 1반환
 			resultData = excuteQuery;
 
@@ -662,7 +657,7 @@ public class DAO {
 	}
 
 	// 검색- 테이블값, 검색조건, 검색할 단어, 삭제 여부(메인에서)
-	public void seachWord(DefaultTableModel dt, String seachLimit, String seachWord, int flagNum) {
+	public void searchWord(DefaultTableModel dt, String seachLimit, String seachWord, int flagNum) {
 		openCon();
 		try {
 			for (int i = 0; i < dt.getRowCount();) {
@@ -716,7 +711,7 @@ public class DAO {
 		closeCon();
 	}
 
-	//time_set에 저장되어 있는 날짜값을 SetManage에 날짜를 txt값에 넣어주기 위해서 사용
+	// time_set에 저장되어 있는 날짜값을 SetManage에 날짜를 txt값에 넣어주기 위해서 사용
 	public String timeShow(String num) {
 		try {
 			openCon();
@@ -766,18 +761,42 @@ public class DAO {
 		return endDate;
 	}
 
+	// 기간으로 검색
+	public String timeSearch(DefaultTableModel dt, String startDay, String endDay) {
+		try {
+			openCon();
+			String sql = "select * from disinfection_target_list where flag = 1 AND cCleanDay between '" + startDay
+					+ "' and '" + endDay + "'";
+			psmt = con.prepareStatement(sql);
+			rs = psmt.executeQuery();
+			for (int i = 0; i < dt.getRowCount();) {
+				dt.removeRow(0);
+			}
+			while (rs.next()) {
+				Object data[] = { rs.getInt("cNum"), rs.getString("cName"), rs.getString("cRoadName"),
+						rs.getString("cBranchName"), rs.getString("cPostal"), rs.getString("cDivision"),
+						rs.getString("cPhone"), rs.getString("cCleanName"), rs.getString("cCleanDay") };
+				dt.addRow(data);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		closeCon();
+		return null;
+	}
+
 	////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////
 	// 회원가입
-	public void insertMember(String userName, String userId, String userPw, String userEmail) {
+	public void insertMember(MemberDTO mdto) {
 		try {
 			openCon();
 			String query1 = "insert into member value(?,?,?,?)";
 			psmt = con.prepareStatement(query1);
-			psmt.setString(1, userName);
-			psmt.setString(2, userId);
-			psmt.setString(3, userPw);
-			psmt.setString(4, userEmail);
+			psmt.setString(1, mdto.getuName());
+			psmt.setString(2, mdto.getuID());
+			psmt.setString(3, mdto.getuPW());
+			psmt.setString(4, mdto.getuEmail());
 			// psmt.executeUpdate();
 			int excuteQuery = psmt.executeUpdate();// 성공하면 1반환
 			if (excuteQuery != 1)
@@ -791,7 +810,7 @@ public class DAO {
 		}
 	}
 
-	// 로그인	
+	// 로그인
 	public int login(String userID, String userPW) {
 		openCon();// 1. DB 연결
 		try {

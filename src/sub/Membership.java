@@ -14,6 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import db.DAO;
+import db.MemberDTO;
 
 public class Membership extends JFrame {
 
@@ -22,7 +23,8 @@ public class Membership extends JFrame {
 	private JTextField txtId;
 	private JTextField txtEmail;
 	private JPasswordField txtPw;
-	static DAO testDB = new DAO();
+	static DAO dao = new DAO();
+	static MemberDTO mdto = new MemberDTO();
 	static int idCk = 0;
 	/**
 	 * Launch the application.
@@ -73,15 +75,14 @@ public class Membership extends JFrame {
 					JOptionPane.showMessageDialog(null, "비밀번호를 입력해주세요");
 				} else if (txtEmail.getText().trim().equals("")) {
 					JOptionPane.showMessageDialog(null, "이메일을 입력해주세요");
-				} else if (idCk != 1 )
-					JOptionPane.showMessageDialog(null, "아이디 중복확인을 해주세요");
-					
+				} else if (idCk != 1)
+					JOptionPane.showMessageDialog(null, "아이디 중복확인을 해주세요");		
 				else {
-					String username = txtName.getText();
-					String userid = txtId.getText();
-					String password = txtPw.getText();
-					String uemail = txtEmail.getText();
-					testDB.insertMember(username, userid, password, uemail);
+					mdto.setuName(txtName.getText());  
+					mdto.setuID(txtId.getText());
+					mdto.setuPW(txtPw.getText());
+					mdto.setuEmail(txtEmail.getText());
+					dao.insertMember(mdto);
 					dispose();
 				}
 			}
@@ -130,9 +131,11 @@ public class Membership extends JFrame {
 				String userid = txtId.getText();
 				DAO dao = DAO.getInstance();
 				int result = dao.idCheck(userid);
-				if (result == 0)
+				if(txtId.getText().trim().equals(""))
+					JOptionPane.showMessageDialog(null, "아이디를 입력해주세요");
+				else if (result == 0)
 					JOptionPane.showMessageDialog(null, "사용중인 ID입니다");
-				if (result == 1) {
+				else if (result == 1) {
 					btnIdCheck.setEnabled(false);
 					JOptionPane.showMessageDialog(null, "사용 가능한 ID입니다");
 					idCk = 1;

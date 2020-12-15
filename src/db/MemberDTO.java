@@ -1,40 +1,32 @@
 package db;
 
 public class MemberDTO {
-	private String daoName;
-	private String daoID;
-	private String daoPW;
-	private String daoEmail;
-	
-	public MemberDTO() {
-		
+	private String uName;
+	private String uID;
+	private String uPW;
+	private String uEmail;
+	public String getuName() {
+		return uName;
 	}
-	
-	public MemberDTO(String id, String pw) {
-		
+	public void setuName(String uName) {
+		this.uName = uName;
 	}
-	public String getDaoName() {
-		return daoName;
+	public String getuID() {
+		return uID;
 	}
-	public void setDaoName(String daoName) {
-		this.daoName = daoName;
+	public void setuID(String uID) {
+		this.uID = uID;
 	}
-	public String getDaoID() {
-		return daoID;
+	public String getuPW() {
+		return uPW;
 	}
-	public void setDaoID(String daoID) {
-		this.daoID = daoID;
+	public void setuPW(String uPW) {
+		this.uPW = uPW;
 	}
-	public String getDaoPW() {
-		return daoPW;
+	public String getuEmail() {
+		return uEmail;
 	}
-	public void setDaoPW(String daoPW) {
-		this.daoPW = daoPW;
-	}
-	public String getDaoEmail() {
-		return daoEmail;
-	}
-	public void setDaoEmail(String daoEmail) {
-		this.daoEmail = daoEmail;
+	public void setuEmail(String uEmail) {
+		this.uEmail = uEmail;
 	}
 }
